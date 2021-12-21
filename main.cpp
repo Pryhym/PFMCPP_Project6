@@ -56,49 +56,71 @@ Purpose:  This project will show you the difference between member functions and
 #include <string>
 struct T
 {
-    T(<#type name#> v, const char* <#variable name#>)   //1
-    //2
-    //3
+    T(int v, const char* l) : value(v), name(l)  {}  //1
+    int value; //2
+    std::string name; //3
 };
-
-struct <#structName1#>                                //4
+struct Compare                                //4
 {
-    <#type name#> compare(<#type name#> a, <#type name#> b) //5
+    T* compare(T* a, T* b) //5
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if (a != nullptr && b != nullptr)
+        {
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
+        }
         return nullptr;
     }
 };
 
 struct U
 {
-    float <#name1#> { 0 }, <#name2#> { 0 };
-    <#returnType#> <#memberFunction#>(<#type name#>* <#updatedValue#>)      //12
+    float number1 { 0 }, number2 { 0 };
+    float distanceShrinker(float* valueUpdated)      //12
     {
-        
+        if (valueUpdated != nullptr)
+        {
+            std::cout << "U's number1 value: " << number1 << std::endl;
+            number1 = *valueUpdated;
+            std::cout << "U's number1 updated value: " << number1 << std::endl;
+            while( std::abs(number2 - number1) > 0.001f )
+            {
+                /*
+                write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+                */
+                number2 += 0.5f;
+            }
+            std::cout << "U's number2 updated value: " << number2 << std::endl;
+            return number2 * number1;
+        }
+        std::cout << "Returned a null pointer, input new number" << std::endl;
+        return 0.0;
     }
 };
 
-struct <#structname2#>
+struct DistanceShrinker
 {
-    static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
+    static float distanceShrinker(U* that, float* valueUpdated)        //10
     {
-        std::cout << "U's <#name1#> value: " << that-><#name1#> << std::endl;
-        that-><#name1#> = <#updatedValue#>;
-        std::cout << "U's <#name1#> updated value: " << that-><#name1#> << std::endl;
-        while( std::abs(that-><#name2#> - that-><#name1#>) > 0.001f )
+        if (that != nullptr && valueUpdated != nullptr)
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            that-><#name2#> += ;
+            std::cout << "U's number1 value: " << that->number1 << std::endl;
+            that->number1 = *valueUpdated;
+            std::cout << "U's number1 updated value: " << that->number1 << std::endl;
+            while( std::abs(that->number2 - that->number1) > 0.001f )
+            {
+                /*
+                 write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+                */
+                that->number2 += .5f;
+            }
+            std::cout << "U's number2 updated value: " << that->number2 << std::endl;
+            return that->number2 * that->number1;
         }
-        std::cout << "U's <#name2#> updated value: " << that-><#name2#> << std::endl;
-        return that-><#name2#> * that-><#name1#>;
+        std::cout << "Returned a null pointer, input new number" << std::endl;
+        return 0.0f;
     }
-};
-        
+};        
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
@@ -115,17 +137,23 @@ struct <#structname2#>
 
 int main()
 {
-    T <#name1#>( , );                                             //6
-    T <#name2#>( , );                                             //6
+    T valchar1(5, "E");                                             //6
+    T valchar2(6 , "M");                                             //6
     
-    <#structName1#> f;                                            //7
-    auto* smaller = f.compare( , );                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
-    
-    U <#name3#>;
+    Compare f;                                            //7
+    auto* smaller = f.compare(&valchar1 ,&valchar2);                              //8
+    if (smaller != nullptr)
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    }
+    else
+    {
+        std::cout << "Null Pointer returned. Change inputs" <<std::endl;
+    }
+    U distance;
     float updatedValue = 5.f;
-    std::cout << "[static func] <#name3#>'s multiplied values: " << <#structname2#>::<#staticFunctionA#>( , ) << std::endl;                  //11
+    std::cout << "[static func] distance shrinker's multiplied values: " << DistanceShrinker::distanceShrinker(&distance, &updatedValue) << std::endl;                  //11
     
-    U <#name4#>;
-    std::cout << "[member func] <#name4#>'s multiplied values: " << <#name4#>.<#memberFunction#>( &updatedValue ) << std::endl;
+    U memDistance;
+    std::cout << "[member func] distance Shrinker's multiplied values: " << memDistance.distanceShrinker( &updatedValue) << std::endl;
 }
