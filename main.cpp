@@ -104,7 +104,7 @@ int main()
     }
     else
     {
-        std::cout << "a != b, please choose different values.." << std::endl;
+        std::cout << "a == b, please choose different values.." << std::endl;
     }
 
     U distance;
