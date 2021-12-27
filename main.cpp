@@ -25,69 +25,56 @@ Create a branch named Part2
 #include <string>
 struct T
 {
-    T(int v, const char* l) : value(v), name(l)  {}  //1
+    T(int v, const std::string& l) : value(v), name(l)  {}  //1
     int value; //2
     std::string name; //3
 };
 struct Compare                                //4
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b) //5
     {
-        if (a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
-        return nullptr;
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
+        return nullptr; 
     }
 };
 
 struct U
 {
     float number1 { 0 }, number2 { 0 };
-    float distanceShrinker(float* valueUpdated)      //12
+    float distanceShrinker(float& valueUpdated)      //12
     {
-        if (valueUpdated != nullptr)
+        std::cout << "U's number1 value: " << number1 << std::endl;
+        number1 = valueUpdated;
+        std::cout << "U's number1 updated value: " << number1 << std::endl;
+        while( std::abs(number2 - number1) > 0.001f )
         {
-            std::cout << "U's number1 value: " << number1 << std::endl;
-            number1 = *valueUpdated;
-            std::cout << "U's number1 updated value: " << number1 << std::endl;
-            while( std::abs(number2 - number1) > 0.001f )
-            {
-                /*
-                write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-                */
-                number2 += 0.5f;
-            }
-            std::cout << "U's number2 updated value: " << number2 << std::endl;
-            return number2 * number1;
+            /*
+            write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+            */
+            number2 += 0.5f;
         }
-        std::cout << "Returned a null pointer, input new number" << std::endl;
-        return 0.0;
+        std::cout << "U's number2 updated value: " << number2 << std::endl;
+        return number2 * number1;
     }
 };
 
 struct DistanceShrinker
 {
-    static float distanceShrinker(U* that, float* valueUpdated)        //10
+    static float distanceShrinker(U& that, float& valueUpdated)        //10
     {
-        if (that != nullptr && valueUpdated != nullptr)
+        std::cout << "U's number1 value: " << that.number1 << std::endl;
+        that.number1 = valueUpdated;
+        std::cout << "U's number1 updated value: " << that.number1 << std::endl;
+        while( std::abs(that.number2 - that.number1) > 0.001f )
         {
-            std::cout << "U's number1 value: " << that->number1 << std::endl;
-            that->number1 = *valueUpdated;
-            std::cout << "U's number1 updated value: " << that->number1 << std::endl;
-            while( std::abs(that->number2 - that->number1) > 0.001f )
-            {
-                /*
-                 write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-                */
-                that->number2 += .5f;
-            }
-            std::cout << "U's number2 updated value: " << that->number2 << std::endl;
-            return that->number2 * that->number1;
+            /*
+             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+            */
+            that.number2 += .5f;
         }
-        std::cout << "Returned a null pointer, input new number" << std::endl;
-        return 0.0f;
+        std::cout << "U's number2 updated value: " << that.number2 << std::endl;
+        return that.number2 * that.number1;
     }
 };        
 /*
@@ -110,19 +97,20 @@ int main()
     T valchar2(6 , "M");                                             //6
     
     Compare f;                                            //7
-    auto* smaller = f.compare(&valchar1 ,&valchar2);                              //8
+    auto* smaller = f.compare(valchar1 ,valchar2);                              //8
     if (smaller != nullptr)
     {
         std::cout << "the smaller one is << " << smaller->name << std::endl; //9
     }
     else
     {
-        std::cout << "Null Pointer returned. Change inputs" <<std::endl;
+        std::cout << "a == b, please choose different values.." << std::endl;
     }
+
     U distance;
     float updatedValue = 5.f;
-    std::cout << "[static func] distance shrinker's multiplied values: " << DistanceShrinker::distanceShrinker(&distance, &updatedValue) << std::endl;                  //11
+    std::cout << "[static func] distance shrinker's multiplied values: " << DistanceShrinker::distanceShrinker(distance,updatedValue) << std::endl;                  //11
     
     U memDistance;
-    std::cout << "[member func] distance Shrinker's multiplied values: " << memDistance.distanceShrinker( &updatedValue) << std::endl;
+    std::cout << "[member func] distance Shrinker's multiplied values: " << memDistance.distanceShrinker( updatedValue) << std::endl;
 }
