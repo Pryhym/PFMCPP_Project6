@@ -104,7 +104,7 @@ int main()
     }
     else
     {
-        std::cout << "Null pointer, smaller points to 0 or f.compare references an address that doesn't exist.." << std::endl;
+        std::cout << "a != b, please choose different values.." << std::endl;
     }
 
     U distance;
