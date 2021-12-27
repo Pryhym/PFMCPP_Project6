@@ -44,8 +44,6 @@ struct U
     float number1 { 0 }, number2 { 0 };
     float distanceShrinker(float& valueUpdated)      //12
     {
-        
-        
         std::cout << "U's number1 value: " << number1 << std::endl;
         number1 = valueUpdated;
         std::cout << "U's number1 updated value: " << number1 << std::endl;
@@ -106,7 +104,7 @@ int main()
     }
     else
     {
-        std::cout << "Null pointer, choose another input" << std::endl;
+        std::cout << "Null pointer, smaller points to 0 or f.compare references an address that doesn't exist.." << std::endl;
     }
 
     U distance;
